@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using ScrapingData.Models;
 
 namespace ScrapingData
 {
@@ -6,16 +7,15 @@ namespace ScrapingData
     {
         private readonly HtmlWeb web;
         private readonly HtmlDocument document;
-        private readonly HtmlNodeCollection nodes;
         public List<Equipment> equipments;
-
-        private HtmlNode firstTable;
-        public ScraperEquipment(string url, string xPath)
+        private readonly HtmlNode firstTable;
+        public ScraperEquipment(string url, string path)
         {
             web = new HtmlWeb();
             document = web.Load(url);
             equipments = new List<Equipment>();
-            firstTable = document.DocumentNode.Descendants("table").FirstOrDefault();
+            //firstTable = document.DocumentNode.Descendants("table").FirstOrDefault();
+            firstTable = document.DocumentNode.SelectSingleNode(path); // another approach
         }
         public List<Equipment> GetScrapingData()
         {
@@ -23,7 +23,7 @@ namespace ScrapingData
             {
                 equipments.Add(
                     new Equipment()
-                    {
+                    { 
                         EquipmentCode = node.SelectSingleNode("td[1]").InnerText,
                         Date = node.SelectSingleNode("td[2]").InnerText,
                         Engine = node.SelectSingleNode("td[3]").InnerText,
