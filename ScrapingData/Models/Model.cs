@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace ScrapingData.Models
 {
-    internal class Model
+    public class Model
     {
         public int ModelId { get; set; }
         public string ModelCode { get; set; }
-        //public DateTime? StartDate { get; set; }
-        //public DateTime? EndDate { get; set; }
+        public string Url { get; set; }
         public string DateRange { get; set; }
         public string SpecificationName { get; set; }
         public ICollection<Equipment> Equipments { get; set; }

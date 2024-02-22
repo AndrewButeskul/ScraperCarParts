@@ -3,7 +3,7 @@ using ScrapingData.Models;
 
 namespace ScrapingData
 {
-    internal class ScraperEquipment : IScraperData<Equipment>
+    public class ScraperEquipment : IScraperData<Equipment>
     {
         private readonly HtmlWeb web;
         private readonly HtmlDocument document;
@@ -14,8 +14,8 @@ namespace ScrapingData
             web = new HtmlWeb();
             document = web.Load(url);
             equipments = new List<Equipment>();
-            //firstTable = document.DocumentNode.Descendants("table").FirstOrDefault();
-            firstTable = document.DocumentNode.SelectSingleNode(path); // another approach
+            //firstTable = document.DocumentNode.Descendants("table").FirstOrDefault(); // using LINQ
+            firstTable = document.DocumentNode.SelectSingleNode(path); 
         }
         public List<Equipment> GetScrapingData()
         {
@@ -24,20 +24,20 @@ namespace ScrapingData
                 equipments.Add(
                     new Equipment()
                     { 
-                        EquipmentCode = node.SelectSingleNode("td[1]").InnerText,
-                        Date = node.SelectSingleNode("td[2]").InnerText,
-                        Engine = node.SelectSingleNode("td[3]").InnerText,
-                        Body = node.SelectSingleNode("td[4]").InnerText,
-                        Grade = node.SelectSingleNode("td[5]").InnerText,
-                        Atm = node.SelectSingleNode("td[6]").InnerText,
-                        GearShiftType = node.SelectSingleNode("td[7]").InnerText,
-                        Cab = node.SelectSingleNode("td[8]").InnerText,
-                        TransmissionModel = node.SelectSingleNode("td[9]").InnerText,
-                        LoadingCapacity = node.SelectSingleNode("td[10]").InnerText,
-                        RearTire = node.SelectSingleNode("td[11]").InnerText,
-                        Destination = node.SelectSingleNode("td[12]").InnerText,
-                        FuelInduction = node.SelectSingleNode("td[13]").InnerText,
-                        BuildingCondition = node.SelectSingleNode("td[14]").InnerText
+                        EquipmentCode = node.SelectSingleNode("td[1]").InnerText.Trim(),
+                        Date = node.SelectSingleNode("td[2]").InnerText.Trim(),
+                        Engine = node.SelectSingleNode("td[3]").InnerText.Trim(),
+                        Body = node.SelectSingleNode("td[4]").InnerText.Trim(),
+                        Grade = node.SelectSingleNode("td[5]").InnerText.Trim(),
+                        Atm = node.SelectSingleNode("td[6]").InnerText.Trim(),
+                        GearShiftType = node.SelectSingleNode("td[7]").InnerText.Trim(),
+                        Cab = node.SelectSingleNode("td[8]").InnerText.Trim(),
+                        TransmissionModel = node.SelectSingleNode("td[9]").InnerText.Trim(),
+                        LoadingCapacity = node.SelectSingleNode("td[10]").InnerText.Trim(),
+                        RearTire = node.SelectSingleNode("td[11]").InnerText.Trim(),
+                        Destination = node.SelectSingleNode("td[12]").InnerText.Trim(),
+                        FuelInduction = node.SelectSingleNode("td[13]").InnerText.Trim(),
+                        BuildingCondition = node.SelectSingleNode("td[14]").InnerText .Trim()
                     });
             }
             return equipments;

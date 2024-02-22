@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScrapingData.Models
 {
-    internal class Equipment
+    public class Equipment
     {
         public int EquipmentId { get; set; }
         public string EquipmentCode { get; set; }
@@ -23,7 +23,7 @@ namespace ScrapingData.Models
         public string? Destination { get; set; }
         public string? FuelInduction { get; set; }
         public string? BuildingCondition { get; set; }
-        ICollection<GroupOfParts> GroupOfParts { get; set; }
+        public ICollection<GroupOfParts> GroupOfParts { get; set; }
 
     }
 }

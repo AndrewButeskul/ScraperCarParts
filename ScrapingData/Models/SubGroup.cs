@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace ScrapingData.Models
 {
-    internal class SubGroup
+    public class SubGroup
     {
         public int SubGroupId { get; set; }
         public string SubGroupName { get; set; }
-        ICollection<Parts> Parts { get; set; }
+        public ICollection<Part> Parts { get; set; }
+        public string Url { get; set; }
 
         public int GroupId { get; set; }
         public GroupOfParts GroupOfPart { get; set; }
