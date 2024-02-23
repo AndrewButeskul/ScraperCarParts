@@ -5,20 +5,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ScrapingData.Constants.Constants;
 
-namespace ScrapingData
+namespace ScrapingData.Scrapers
 {
     public class ScraperModel : IScraperData<ModelName>
     {
+        private readonly HtmlWeb web;
         private readonly HtmlDocument document;
 
         public List<ModelName> modelNames;
         public List<Model> modelData;
-       
-        public ScraperModel(string mainHtml)
+
+        public ScraperModel(string url)
         {
-            document = new();
-            document.LoadHtml(mainHtml);
+            web = new HtmlWeb();
+            document = web.Load(url);
             modelNames = new();
         }
         public List<ModelName> GetScrapingData()
@@ -36,15 +38,15 @@ namespace ScrapingData
                     };
 
                     var modelDataNodes = nameNode.ParentNode.ParentNode.SelectNodes(".//div[@class='List']");
-                    if(modelDataNodes != null)
+                    if (modelDataNodes != null)
                     {
-                        foreach(var modelDataNode in modelDataNodes)
+                        foreach (var modelDataNode in modelDataNodes)
                         {
                             var modelData = new Model
                             {
                                 ModelCode = modelDataNode.SelectSingleNode(".//div[@class='id']/a").InnerText.Trim(),
                                 DateRange = modelDataNode.SelectSingleNode(".//div[@class='dateRange']").InnerText.Trim(),
-                                Url = modelDataNode.SelectSingleNode(".//div[@class='id']/a").GetAttributeValue("href", ""),
+                                Url = string.Concat(preffixURL, modelDataNode.SelectSingleNode(".//div[@class='id']/a").GetAttributeValue("href", "")),
                                 SpecificationName = modelDataNode.SelectSingleNode(".//div[@class='modelCode']").InnerText.Trim()
                             };
                             modelName.Models.Add(modelData);

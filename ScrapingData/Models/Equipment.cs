@@ -10,6 +10,7 @@ namespace ScrapingData.Models
     {
         public int EquipmentId { get; set; }
         public string EquipmentCode { get; set; }
+        public string Url { get; set; }
         public string? Date { get; set; }
         public string? Engine { get; set; }
         public string? Body { get; set; }

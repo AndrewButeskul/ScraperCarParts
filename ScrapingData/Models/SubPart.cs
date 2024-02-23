@@ -10,7 +10,7 @@ namespace ScrapingData.Models
     {
         public int SubPartId { get; set; }
         public string PartCode { get; set; }
-        public byte Count { get; set; }
+        public string Count { get; set; }
         public string DateRange { get; set; }
         public string Info {  get; set; }
 

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ScrapingData
+namespace ScrapingData.Scrapers
 {
     public class ScraperParts : IScraperData<Part>
     {
@@ -32,7 +32,7 @@ namespace ScrapingData
                     var part = new Part
                     {
                         PartTreeCode = partNode.SelectSingleNode("th").InnerText.Trim().Split('&')[0],
-                        NameTree = partNode.SelectSingleNode("th").InnerText.Trim().Substring((int)partNode.SelectSingleNode("th").InnerText.Trim().IndexOf(' ') + 1),
+                        NameTree = partNode.SelectSingleNode("th").InnerText.Trim().Substring(partNode.SelectSingleNode("th").InnerText.Trim().IndexOf(' ') + 1),
                         SubParts = new List<SubPart>()
                     };
 
@@ -56,8 +56,8 @@ namespace ScrapingData
                         {
                             var subPart = new SubPart
                             {
-                                PartCode = subPartNode.SelectSingleNode("td[1]").InnerText.Trim(),
-                                Count = Convert.ToByte(subPartNode.SelectSingleNode("td[2]").InnerText.Trim()),
+                                PartCode = Regex.Match(subPartNode.SelectSingleNode("td[1]").InnerText.Trim(), @"\d+$").Value,
+                                Count = subPartNode.SelectSingleNode("td[2]").InnerText.Trim(),
                                 DateRange = subPartNode.SelectSingleNode("td[3]").InnerText.Trim(),
                                 Info = subPartNode.SelectSingleNode("td[4]").InnerText.Trim()
                             };

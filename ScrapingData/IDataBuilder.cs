@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace ScrapingData
 {
-    public class ScraperData
+    public interface IDataBuilder
     {
+        Data Build();
+        //Data GetData();
     }
 }

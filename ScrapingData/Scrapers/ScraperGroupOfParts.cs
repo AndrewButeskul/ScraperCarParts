@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ScrapingData.Constants.Constants;
 
-namespace ScrapingData
+namespace ScrapingData.Scrapers
 {
     public class ScraperGroupOfParts : IScraperData<GroupOfParts>
     {
-        //private readonly HttpClient httpClient;
         private readonly HtmlWeb web;
-        private readonly HtmlDocument document;        
+        private readonly HtmlDocument document;
 
         public List<GroupOfParts> groupOfParts;
 
@@ -25,14 +25,14 @@ namespace ScrapingData
         public List<GroupOfParts> GetScrapingData()
         {
             var nameNodes = document.DocumentNode.SelectNodes("//*[@class='List']");
-            if(nameNodes != null)
+            if (nameNodes != null)
             {
                 foreach (var nameNode in nameNodes)
                 {
                     groupOfParts.Add(new GroupOfParts
                     {
                         GroupName = nameNode.InnerText.Trim(),
-                        Url = nameNode.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href", "")
+                        Url = string.Concat(preffixURL, nameNode.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href", ""))
                     });
                 }
             }

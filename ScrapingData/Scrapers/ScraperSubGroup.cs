@@ -6,8 +6,10 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using static ScrapingData.Constants.Constants;
 
-namespace ScrapingData
+
+namespace ScrapingData.Scrapers
 {
     public class ScraperSubGroup : IScraperData<SubGroup>
     {
@@ -33,7 +35,7 @@ namespace ScrapingData
                     subGroups.Add(new SubGroup()
                     {
                         SubGroupName = title.SelectSingleNode(".//div[@class='name']").InnerText.Trim(),
-                        Url = title.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href","").Trim()
+                        Url = string.Concat(preffixURL,title.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href", "").Trim())
                     });
                 }
             }
