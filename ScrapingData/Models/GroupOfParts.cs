@@ -10,10 +10,10 @@ namespace ScrapingData.Models
     {
         public int GroupId { get; set; }
         public string GroupName { get; set; }
-        public ICollection<SubGroup> SubGroups { get; set; }
+        public ICollection<SubGroup>? SubGroups { get; set; }
         public string Url { get; set; }
 
         public int EquipmentId { get; set; }
-        public Equipment Equipment { get; set; }
+        public Equipment? Equipment { get; set; }
     }
 }

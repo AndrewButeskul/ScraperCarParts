@@ -1,5 +1,7 @@
-﻿using ScrapingData.Scrapers;
+﻿using ScrapingData.Models;
+using ScrapingData.Scrapers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,74 +11,75 @@ namespace ScrapingData
 {
     public class ScraperManager
     {
-        private readonly string _initURL;
+        private readonly string _initUrl;
+        private List<ModelName> modelsData;
 
         public ScraperManager(string initURL)
         {
-            _initURL = initURL;
+            _initUrl = initURL;
+            modelsData = new();
         }
 
-        public Data ScrapingData()
+        public List<ModelName> ScrapingData()
         {
-            var dataBuilder = new DataBuilder();
-            ScarpeModels(_initURL, dataBuilder);
-            var data = dataBuilder.Build();
-            return data;
+            ScarpeModels(_initUrl);
+            return modelsData;
         }
 
-        private void ScarpeModels(string url, DataBuilder dataBuilder)
+        private void ScarpeModels(string url)
         {
             var scraperModels = new ScraperModel(url);
-            var models = scraperModels.GetScrapingData();
-            dataBuilder.AddModelData(models);
+            modelsData = scraperModels.GetScrapingData();
 
-            foreach(var model in models)
+            foreach(var model in modelsData)
             {
-                foreach (var modelData in model.Models)
+                foreach (var subModel in model.SubModels)
                 {
-                    ScrapeEquipments(modelData.Url, dataBuilder);
+                    subModel.Equipments = new List<Equipment>();
+                    subModel.Equipments = ScrapeEquipments(subModel.Url);
                 }
             }
         }
-        private void ScrapeEquipments(string url, DataBuilder dataBuilder)
+        private List<Equipment> ScrapeEquipments(string url)
         {
             var scraperEquipments = new ScraperEquipment(url);
             var equipments = scraperEquipments.GetScrapingData();
-            dataBuilder.AddEquipmentData(equipments);
-
             foreach (var equipment in equipments)
             {
-                ScrapeGroupOfParts(equipment.Url, dataBuilder);
+                equipment.GroupOfParts = new List<GroupOfParts>();
+                equipment.GroupOfParts = ScrapeGroupOfParts(equipment.Url);
             }
+            return equipments;
         }
-        private void ScrapeGroupOfParts(string url, DataBuilder dataBuilder)
+        private List<GroupOfParts> ScrapeGroupOfParts(string url)
         {
             var scraperGroupOfParts = new ScraperGroupOfParts(url);
             var groups = scraperGroupOfParts.GetScrapingData();
-            dataBuilder.AddGroupOfPartsData(groups);
 
             foreach (var group in groups)
             {
-                ScrapeSubGroups(group.Url, dataBuilder);
+               group.SubGroups = new List<SubGroup>();
+               group.SubGroups = ScrapeSubGroups(group.Url);
             }
-        }
-        private void ScrapeSubGroups(string url, DataBuilder dataBuilder)
+            return groups;
+         }
+        private List<SubGroup> ScrapeSubGroups(string url)
         {
             var scraperSubGroup = new ScraperSubGroup(url);
             var subGroups = scraperSubGroup.GetScrapingData();
-            dataBuilder.AddSubGroupData(subGroups);
 
             foreach (var subGroup in subGroups)
             {
-                ScrapeParts(subGroup.Url, dataBuilder);
+                subGroup.Parts = new List<Part>();
+                subGroup.Parts = ScrapeParts(subGroup.Url);
             }
+            return subGroups;
         }
 
-        private void ScrapeParts(string url, DataBuilder dataBuilder)
+        private List<Part> ScrapeParts(string url)
         {
             var scraperParts = new ScraperParts(url);
-            var parts = scraperParts.GetScrapingData();
-            dataBuilder.AddPartData(parts);
+            return scraperParts.GetScrapingData();
         }
     }
 }

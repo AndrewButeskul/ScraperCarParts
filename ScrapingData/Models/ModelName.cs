@@ -10,7 +10,7 @@ namespace ScrapingData.Models
     {
         public int ModelNameId { get; set; }
         public string Name { get; set; }
-        public ICollection<Model>? Models { get; set; }
+        public ICollection<SubModel>? SubModels { get; set; }
         
     }
 }

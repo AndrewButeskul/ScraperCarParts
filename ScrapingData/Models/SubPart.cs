@@ -15,6 +15,6 @@ namespace ScrapingData.Models
         public string Info {  get; set; }
 
         public int PartId { get; set; }
-        public Part Part { get; set; }
+        public Part? Part { get; set; }
     }
 }

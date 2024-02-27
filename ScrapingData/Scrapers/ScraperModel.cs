@@ -15,7 +15,7 @@ namespace ScrapingData.Scrapers
         private readonly HtmlDocument document;
 
         public List<ModelName> modelNames;
-        public List<Model> modelData;
+        public List<SubModel> modelData;
 
         public ScraperModel(string url)
         {
@@ -34,7 +34,7 @@ namespace ScrapingData.Scrapers
                     var modelName = new ModelName
                     {
                         Name = nameNode.InnerText.Trim(),
-                        Models = new List<Model>()
+                        SubModels = new List<SubModel>()
                     };
 
                     var modelDataNodes = nameNode.ParentNode.ParentNode.SelectNodes(".//div[@class='List']");
@@ -42,14 +42,14 @@ namespace ScrapingData.Scrapers
                     {
                         foreach (var modelDataNode in modelDataNodes)
                         {
-                            var modelData = new Model
+                            var modelData = new SubModel
                             {
                                 ModelCode = modelDataNode.SelectSingleNode(".//div[@class='id']/a").InnerText.Trim(),
                                 DateRange = modelDataNode.SelectSingleNode(".//div[@class='dateRange']").InnerText.Trim(),
                                 Url = string.Concat(preffixURL, modelDataNode.SelectSingleNode(".//div[@class='id']/a").GetAttributeValue("href", "")),
                                 SpecificationName = modelDataNode.SelectSingleNode(".//div[@class='modelCode']").InnerText.Trim()
                             };
-                            modelName.Models.Add(modelData);
+                            modelName.SubModels.Add(modelData);
                         }
                     }
                     modelNames.Add(modelName);

@@ -24,7 +24,10 @@ namespace ScrapingData.Models
         public string? Destination { get; set; }
         public string? FuelInduction { get; set; }
         public string? BuildingCondition { get; set; }
-        public ICollection<GroupOfParts> GroupOfParts { get; set; }
+        public ICollection<GroupOfParts>? GroupOfParts { get; set; }
+
+        public int ModelId { get; set; }
+        public SubModel? Model { get; set; }
 
     }
 }

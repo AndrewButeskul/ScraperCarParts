@@ -11,7 +11,6 @@ namespace ScrapingData.Scrapers
         private readonly HtmlDocument document;
         public List<Equipment> equipments;
 
-        //private readonly HtmlNode firstTable;
         public ScraperEquipment(string url)
         {
             web = new HtmlWeb();
@@ -21,7 +20,6 @@ namespace ScrapingData.Scrapers
         public List<Equipment> GetScrapingData()
         {
             var firstTable = document.DocumentNode.SelectSingleNode("//*[@class='ifTableBody']/table[1]");
-
             foreach (var node in firstTable.Descendants("tr").Skip(1))
             {
                 equipments.Add(
@@ -42,7 +40,7 @@ namespace ScrapingData.Scrapers
                         Destination = node.SelectSingleNode("td[12]").InnerText.Trim(),
                         FuelInduction = node.SelectSingleNode("td[13]").InnerText.Trim(),
                         BuildingCondition = node.SelectSingleNode("td[14]").InnerText.Trim()
-                    }) ;
+                    });
             }
             return equipments;
         }

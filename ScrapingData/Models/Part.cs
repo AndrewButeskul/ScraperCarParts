@@ -11,9 +11,9 @@ namespace ScrapingData.Models
         public int PartId { get; set; }
         public string PartTreeCode { get; set; }
         public string NameTree { get; set; }
-        public ICollection<SubPart> SubParts { get; set; }
+        public ICollection<SubPart>? SubParts { get; set; }
 
         public int SubGroupId { get; set; }
-        public SubGroup SubGroup { get; set; }
+        public SubGroup? SubGroup { get; set; }
     }
 }

@@ -1,50 +1,39 @@
 ﻿using HtmlAgilityPack;
 using ScrapingData;
+using ScrapingData.Configurations;
 using ScrapingData.Models;
 using ScrapingData.Scrapers;
 using System.Globalization;
 
+//SimpleTestScraping();
 
 string URL = "https://www.ilcats.ru/toyota/?function=getModels&market=EU";
 
 ScraperManager scraperManager = new(URL);
-Data data = scraperManager.ScrapingData();
-Console.WriteLine("Completed");
+var data = scraperManager.ScrapingData();
 
-Console.WriteLine($"Count of Models: {data.ModelNames.Count}");
-Console.WriteLine($"Count of Equipments: {data.EquipmentData.Count}");
-Console.WriteLine($"Count of Group: {data.GroupOfPartsData.Count}");
-Console.WriteLine($"Count of SubGroup: {data.SubPartsData.Count}");
-Console.WriteLine($"Count of Parts: {data.PartsData.Count}");
-Console.WriteLine($"Count of SubParts: {data.SubPartsData.Count}");
+Console.WriteLine("ScrapingManager has finished its process successfully.");
 
-Console.WriteLine("------------------------------------------------");
+CreateDb();
+AddDataToDb(data);
 
-foreach (var item in data.ModelData)
+Console.WriteLine("All data have been saved to Db successfully.");
+
+static void AddDataToDb(IEnumerable<ModelName> data)
 {
-    Console.WriteLine($"Model Code: {item.ModelCode} {item.SpecificationName}");
+    using var dbContext = new AppDbContext();
+
+    dbContext.AddRange(data);
+    dbContext.SaveChanges();
+}
+static void CreateDb()
+{
+    using var dbContext = new AppDbContext();
+
+    dbContext.Database.EnsureDeleted(); // if db exists command will remove it 
+    dbContext.Database.EnsureCreated();
 }
 
-Console.WriteLine("------------------------------------------------");
-
-foreach (var item in data.EquipmentData)
-{
-    Console.WriteLine($"Model Code: {item.EquipmentCode}");
-}
-Console.WriteLine("------------------------------------------------");
-
-foreach (var item in data.GroupOfPartsData)
-{
-    Console.WriteLine($"Model Code: {item.GroupName}");
-}
-
-Console.WriteLine("------------------------------------------------");
-
-foreach (var item in data.PartsData)
-{
-    Console.WriteLine($"Model Code: {item.NameTree} {item.PartTreeCode}");
-}
-//SimpleTestScraping();
 static void SimpleTestScraping()
 {
     // -----------------------   Page Models   ----------------------------
@@ -61,9 +50,9 @@ static void SimpleTestScraping()
     foreach (var modelName in modelNames)
     {
         Console.WriteLine($"{modelName.Name}");
-        foreach (var model in modelName.Models)
+        foreach (var model in modelName.SubModels)
         {
-            Console.WriteLine($"{model.Name} {model.SpecificationName} {model.DateRange}");
+            Console.WriteLine($"{model.ModelName} {model.SpecificationName} {model.DateRange}");
         }
     }
 
