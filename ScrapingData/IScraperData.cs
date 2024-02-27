@@ -10,5 +10,6 @@ namespace ScrapingData
     public interface IScraperData<T>
     {
         List<T> GetScrapingData();
+        string GetScraperInfo();
     }
 }

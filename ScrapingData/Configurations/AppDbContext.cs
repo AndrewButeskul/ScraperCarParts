@@ -13,14 +13,19 @@ namespace ScrapingData.Configurations
         public DbSet<ModelName> Models { get; set; }
         public DbSet<SubModel> SubModels { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
-        public DbSet<GroupOfParts> Groups { get; set; }
+        public DbSet<GroupOfPart> Groups { get; set; }
         public DbSet<SubGroup> SubGroups { get; set; }
         public DbSet<Part> Parts { get; set; }
         public DbSet<SubPart> SubParts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Toyota;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Toyota;Trusted_Connection=True;")
+                .EnableSensitiveDataLogging()
+                .LogTo(
+                Console.WriteLine,
+                new[] {DbLoggerCategory.Database.Command.Name},
+                Microsoft.Extensions.Logging.LogLevel.Information);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,7 +40,7 @@ namespace ScrapingData.Configurations
                 .HasMany(x => x.Equipments)
                 .WithOne(x => x.Model)
                 .HasForeignKey(x => x.ModelId)
-                .HasPrincipalKey(x => x.ModelId);
+                .HasPrincipalKey(x => x.SubModelId);
 
             modelBuilder.Entity<Equipment>()
                 .HasMany(x => x.GroupOfParts)
@@ -43,11 +48,11 @@ namespace ScrapingData.Configurations
                 .HasForeignKey(x => x.EquipmentId)
                 .HasPrincipalKey(x => x.EquipmentId);
 
-            modelBuilder.Entity<GroupOfParts>()
+            modelBuilder.Entity<GroupOfPart>()
                 .HasMany(x => x.SubGroups)
                 .WithOne(x => x.GroupOfPart)
                 .HasForeignKey(x => x.GroupId)
-                .HasPrincipalKey (x => x.GroupId);
+                .HasPrincipalKey (x => x.GroupOfPartId);
 
             modelBuilder.Entity<SubGroup>()
                 .HasMany(x => x.Parts)

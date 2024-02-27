@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ScrapingData.Models
 {
-    public class GroupOfParts
+    public class GroupOfPart
     {
-        public int GroupId { get; set; }
+        public int GroupOfPartId { get; set; }
         public string GroupName { get; set; }
         public ICollection<SubGroup>? SubGroups { get; set; }
         public string Url { get; set; }

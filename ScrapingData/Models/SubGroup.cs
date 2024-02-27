@@ -14,6 +14,6 @@ namespace ScrapingData.Models
         public string Url { get; set; }
 
         public int GroupId { get; set; }
-        public GroupOfParts? GroupOfPart { get; set; }
+        public GroupOfPart? GroupOfPart { get; set; }
     }
 }

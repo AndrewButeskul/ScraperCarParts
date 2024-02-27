@@ -9,12 +9,12 @@ using static ScrapingData.Constants.Constants;
 
 namespace ScrapingData.Scrapers
 {
-    public class ScraperGroupOfParts : IScraperData<GroupOfParts>
+    public class ScraperGroupOfParts : IScraperData<GroupOfPart>
     {
         private readonly HtmlWeb web;
         private readonly HtmlDocument document;
 
-        public List<GroupOfParts> groupOfParts;
+        public List<GroupOfPart> groupOfParts;
 
         public ScraperGroupOfParts(string url)
         {
@@ -22,14 +22,17 @@ namespace ScrapingData.Scrapers
             document = web.Load(url);
             groupOfParts = new();
         }
-        public List<GroupOfParts> GetScrapingData()
+
+        public string GetScraperInfo() => $"Count: {groupOfParts.Count}";
+
+        public List<GroupOfPart> GetScrapingData()
         {
             var nameNodes = document.DocumentNode.SelectNodes("//*[@class='List']");
             if (nameNodes != null)
             {
                 foreach (var nameNode in nameNodes)
                 {
-                    groupOfParts.Add(new GroupOfParts
+                    groupOfParts.Add(new GroupOfPart
                     {
                         GroupName = nameNode.InnerText.Trim(),
                         Url = string.Concat(preffixURL, nameNode.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href", ""))

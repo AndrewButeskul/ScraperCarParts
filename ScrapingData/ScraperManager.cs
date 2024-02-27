@@ -30,8 +30,8 @@ namespace ScrapingData
         {
             var scraperModels = new ScraperModel(url);
             modelsData = scraperModels.GetScrapingData();
-
-            foreach(var model in modelsData)
+            Logger.LogToConsole(scraperModels);
+            foreach (var model in modelsData)
             {
                 foreach (var subModel in model.SubModels)
                 {
@@ -44,18 +44,19 @@ namespace ScrapingData
         {
             var scraperEquipments = new ScraperEquipment(url);
             var equipments = scraperEquipments.GetScrapingData();
+            Logger.LogToConsole(scraperEquipments);
             foreach (var equipment in equipments)
             {
-                equipment.GroupOfParts = new List<GroupOfParts>();
+                equipment.GroupOfParts = new List<GroupOfPart>();
                 equipment.GroupOfParts = ScrapeGroupOfParts(equipment.Url);
             }
             return equipments;
         }
-        private List<GroupOfParts> ScrapeGroupOfParts(string url)
+        private List<GroupOfPart> ScrapeGroupOfParts(string url)
         {
             var scraperGroupOfParts = new ScraperGroupOfParts(url);
             var groups = scraperGroupOfParts.GetScrapingData();
-
+            Logger.LogToConsole(scraperGroupOfParts);
             foreach (var group in groups)
             {
                group.SubGroups = new List<SubGroup>();
@@ -67,7 +68,7 @@ namespace ScrapingData
         {
             var scraperSubGroup = new ScraperSubGroup(url);
             var subGroups = scraperSubGroup.GetScrapingData();
-
+            Logger.LogToConsole(scraperSubGroup);
             foreach (var subGroup in subGroups)
             {
                 subGroup.Parts = new List<Part>();
@@ -79,7 +80,9 @@ namespace ScrapingData
         private List<Part> ScrapeParts(string url)
         {
             var scraperParts = new ScraperParts(url);
-            return scraperParts.GetScrapingData();
+            var parts = scraperParts.GetScrapingData();
+            Logger.LogToConsole(scraperParts);
+            return parts;
         }
     }
 }
