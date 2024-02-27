@@ -21,6 +21,8 @@ namespace ScrapingData.Scrapers
             document = web.Load(url);
             parts = new();
         }
+        public string GetScraperInfo() => $"Count: {parts.Count}";
+
         public List<Part> GetScrapingData()
         {
             var partNodes = document.DocumentNode.SelectNodes("//*[@class='Info']/table[1]/tr[th/@colspan='4']");

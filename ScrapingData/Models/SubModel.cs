@@ -8,7 +8,7 @@ namespace ScrapingData.Models
 {
     public class SubModel
     {
-        public int ModelId { get; set; }
+        public int SubModelId { get; set; }
         public string ModelCode { get; set; }
         public string Url { get; set; }
         public string DateRange { get; set; }

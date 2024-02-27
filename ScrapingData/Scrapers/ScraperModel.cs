@@ -23,6 +23,9 @@ namespace ScrapingData.Scrapers
             document = web.Load(url);
             modelNames = new();
         }
+
+        public string GetScraperInfo() => $"Count: {modelNames.Count}";
+
         public List<ModelName> GetScrapingData()
         {
             var nameNodes = document.DocumentNode.SelectNodes("//*[@class='List Multilist']//div[@class='Header']//div[@class='name']");
@@ -31,6 +34,9 @@ namespace ScrapingData.Scrapers
             {
                 foreach (var nameNode in nameNodes)
                 {
+                    if (modelNames.Count > 4)
+                        break; // only first 4 models
+
                     var modelName = new ModelName
                     {
                         Name = nameNode.InnerText.Trim(),

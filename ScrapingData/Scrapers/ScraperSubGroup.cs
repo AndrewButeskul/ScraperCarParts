@@ -24,6 +24,7 @@ namespace ScrapingData.Scrapers
             document = web.Load(url);
             subGroups = new();
         }
+        public string GetScraperInfo() => $"Count: {subGroups.Count}";
 
         public List<SubGroup> GetScrapingData()
         {
