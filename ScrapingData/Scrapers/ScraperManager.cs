@@ -1,13 +1,7 @@
 ﻿using ScrapingData.Models;
-using ScrapingData.Scrapers;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ScrapingData.Logger;
 
-namespace ScrapingData
+namespace ScrapingData.Scrapers
 {
     public class ScraperManager
     {
@@ -30,7 +24,7 @@ namespace ScrapingData
         {
             var scraperModels = new ScraperModel(url);
             modelsData = scraperModels.GetScrapingData();
-            Logger.LogToConsole(scraperModels);
+            Logger.Logger.LogToConsole(scraperModels);
             foreach (var model in modelsData)
             {
                 foreach (var subModel in model.SubModels)
@@ -44,7 +38,7 @@ namespace ScrapingData
         {
             var scraperEquipments = new ScraperEquipment(url);
             var equipments = scraperEquipments.GetScrapingData();
-            Logger.LogToConsole(scraperEquipments);
+            Logger.Logger.LogToConsole(scraperEquipments);
             foreach (var equipment in equipments)
             {
                 equipment.GroupOfParts = new List<GroupOfPart>();
@@ -56,19 +50,19 @@ namespace ScrapingData
         {
             var scraperGroupOfParts = new ScraperGroupOfParts(url);
             var groups = scraperGroupOfParts.GetScrapingData();
-            Logger.LogToConsole(scraperGroupOfParts);
+            Logger.Logger.LogToConsole(scraperGroupOfParts);
             foreach (var group in groups)
             {
-               group.SubGroups = new List<SubGroup>();
-               group.SubGroups = ScrapeSubGroups(group.Url);
+                group.SubGroups = new List<SubGroup>();
+                group.SubGroups = ScrapeSubGroups(group.Url);
             }
             return groups;
-         }
+        }
         private List<SubGroup> ScrapeSubGroups(string url)
         {
             var scraperSubGroup = new ScraperSubGroup(url);
             var subGroups = scraperSubGroup.GetScrapingData();
-            Logger.LogToConsole(scraperSubGroup);
+            Logger.Logger.LogToConsole(scraperSubGroup);
             foreach (var subGroup in subGroups)
             {
                 subGroup.Parts = new List<Part>();
@@ -81,7 +75,7 @@ namespace ScrapingData
         {
             var scraperParts = new ScraperParts(url);
             var parts = scraperParts.GetScrapingData();
-            Logger.LogToConsole(scraperParts);
+            Logger.Logger.LogToConsole(scraperParts);
             return parts;
         }
     }

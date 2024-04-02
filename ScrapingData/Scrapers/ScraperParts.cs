@@ -1,11 +1,8 @@
 ﻿using HtmlAgilityPack;
+using ScrapingData.Contracts;
 using ScrapingData.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ScrapingData.Scrapers
 {
@@ -31,12 +28,9 @@ namespace ScrapingData.Scrapers
             {
                 foreach (var partNode in partNodes)
                 {
-                    var part = new Part
-                    {
-                        PartTreeCode = partNode.SelectSingleNode("th").InnerText.Trim().Split('&')[0],
-                        NameTree = partNode.SelectSingleNode("th").InnerText.Trim().Substring(partNode.SelectSingleNode("th").InnerText.Trim().IndexOf(' ') + 1),
-                        SubParts = new List<SubPart>()
-                    };
+                    var part = GetPart(partNode);                    
+
+                    // *** Handling Sub Parts ***
 
                     var partClass = partNode.GetAttributeValue("class", "");
                     var match = Regex.Match(partClass, @"TR-(\d+)([A-Z]?)");
@@ -56,14 +50,7 @@ namespace ScrapingData.Scrapers
                     {
                         foreach (var subPartNode in subPartNodes)
                         {
-                            var subPart = new SubPart
-                            {
-                                PartCode = Regex.Match(subPartNode.SelectSingleNode("td[1]").InnerText.Trim(), @"\d+$").Value,
-                                Count = subPartNode.SelectSingleNode("td[2]").InnerText.Trim(),
-                                DateRange = subPartNode.SelectSingleNode("td[3]").InnerText.Trim(),
-                                Info = subPartNode.SelectSingleNode("td[4]").InnerText.Trim()
-                            };
-                            part.SubParts.Add(subPart);
+                            part.SubParts.Add(GetSubPart(subPartNode));
                         }
                     }
                     parts.Add(part);
@@ -72,6 +59,49 @@ namespace ScrapingData.Scrapers
             }
 
             return parts;
+        }
+
+        private Part GetPart(HtmlNode? partNode)
+        {
+            try
+            {
+                var part = new Part
+                {
+                    PartTreeCode = partNode.SelectSingleNode("th").InnerText.Trim().Split('&')[0],
+                    NameTree = partNode.SelectSingleNode("th").InnerText.Trim().Substring(partNode.SelectSingleNode("th").InnerText.Trim().IndexOf(' ') + 1),
+                    SubParts = new List<SubPart>()
+                };
+
+                return part;
+            }
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return new();
+        }
+
+        private SubPart GetSubPart(HtmlNode? subPartNode)
+        {
+            try
+            {
+                var subPart = new SubPart
+                {
+                    PartCode = Regex.Match(subPartNode.SelectSingleNode("td[1]").InnerText.Trim(), @"\d+$").Value,
+                    Count = subPartNode.SelectSingleNode("td[2]").InnerText.Trim(),
+                    DateRange = subPartNode.SelectSingleNode("td[3]").InnerText.Trim(),
+                    Info = subPartNode.SelectSingleNode("td[4]").InnerText.Trim()
+                };
+
+                return subPart;
+            }
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return new();
         }
     }
 }

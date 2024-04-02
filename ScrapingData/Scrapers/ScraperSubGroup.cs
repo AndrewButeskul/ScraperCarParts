@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using ScrapingData.Contracts;
 using ScrapingData.Models;
 using System;
 using System.Collections.Generic;
@@ -33,11 +34,18 @@ namespace ScrapingData.Scrapers
             {
                 foreach (var title in titlesNodes)
                 {
-                    subGroups.Add(new SubGroup()
+                    try
                     {
-                        SubGroupName = title.SelectSingleNode(".//div[@class='name']").InnerText.Trim(),
-                        Url = string.Concat(preffixURL,title.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href", "").Trim())
-                    });
+                        subGroups.Add(new SubGroup()
+                        {
+                            SubGroupName = title.SelectSingleNode(".//div[@class='name']").InnerText.Trim(),
+                            Url = string.Concat(preffixURL, title.SelectSingleNode(".//div[@class='name']/a").GetAttributeValue("href", "").Trim())
+                        });
+                    }
+                    catch(NullReferenceException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
             }
             return subGroups;

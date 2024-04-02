@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using ScrapingData.Contracts;
 using ScrapingData.Models;
 using static ScrapingData.Constants.Constants;
 

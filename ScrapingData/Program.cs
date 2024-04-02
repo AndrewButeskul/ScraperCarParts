@@ -1,6 +1,6 @@
-﻿using ScrapingData;
-using ScrapingData.Configurations;
+﻿using ScrapingData.Configurations;
 using ScrapingData.Models;
+using ScrapingData.Scrapers;
 
 
 string URL = "https://www.ilcats.ru/toyota/?function=getModels&market=EU";

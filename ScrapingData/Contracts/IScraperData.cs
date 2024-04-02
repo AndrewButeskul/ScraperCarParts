@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScrapingData
+namespace ScrapingData.Contracts
 {
     public interface IScraperData<T>
     {

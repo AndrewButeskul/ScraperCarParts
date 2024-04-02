@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using ScrapingData.Contracts;
 using ScrapingData.Models;
 using System;
 using System.Collections.Generic;
@@ -48,14 +49,18 @@ namespace ScrapingData.Scrapers
                     {
                         foreach (var modelDataNode in modelDataNodes)
                         {
-                            var modelData = new SubModel
+                            try
                             {
-                                ModelCode = modelDataNode.SelectSingleNode(".//div[@class='id']/a").InnerText.Trim(),
-                                DateRange = modelDataNode.SelectSingleNode(".//div[@class='dateRange']").InnerText.Trim(),
-                                Url = string.Concat(preffixURL, modelDataNode.SelectSingleNode(".//div[@class='id']/a").GetAttributeValue("href", "")),
-                                SpecificationName = modelDataNode.SelectSingleNode(".//div[@class='modelCode']").InnerText.Trim()
-                            };
-                            modelName.SubModels.Add(modelData);
+                                var modelData = new SubModel
+                                {
+                                    ModelCode = modelDataNode.SelectSingleNode(".//div[@class='id']/a").InnerText.Trim(),
+                                    DateRange = modelDataNode.SelectSingleNode(".//div[@class='dateRange']").InnerText.Trim(),
+                                    Url = string.Concat(preffixURL, modelDataNode.SelectSingleNode(".//div[@class='id']/a").GetAttributeValue("href", "")),
+                                    SpecificationName = modelDataNode.SelectSingleNode(".//div[@class='modelCode']").InnerText.Trim()
+                                };
+                                modelName.SubModels.Add(modelData);
+                            }
+                            catch(NullReferenceException ex) { Console.WriteLine(ex.Message); }
                         }
                     }
                     modelNames.Add(modelName);
